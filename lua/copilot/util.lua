@@ -2,7 +2,7 @@ local M = {}
 
 local format_pos = function()
   local pos = vim.api.nvim_win_get_cursor(0)
-  return { character = pos[2], line = pos[1] - 1 }
+  return { character = pos[2], line = pos[1]-1 }
 end
 
 local get_relfile = function()
@@ -62,9 +62,11 @@ M.register_completion_handler = function(handler)
   end
 end
 
-M.send_completion_request = function()
+M.send_completion_request = function(method, handler)
   local params = M.get_completion_params()
-  vim.lsp.buf_request(0, "getCompletions", params, completion_handler)
+  method = method or "getCompletions"
+  handler = handler or completion_handler
+  vim.lsp.buf_request(0, method, params, handler)
 end
 
 M.create_request_autocmd = function(group)
